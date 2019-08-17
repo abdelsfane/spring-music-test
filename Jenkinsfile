@@ -9,5 +9,6 @@ node {
       sh '''
         echo "Hellow-World"
         '''
+        }
     }
 }
