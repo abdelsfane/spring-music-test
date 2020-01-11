@@ -1,11 +1,12 @@
 #!/bin/bash
 
 results=""
-echo "${LICATION_ARTIFACT_URL}"
-echo "${GIT_REPO_URL}"
-echo "${GIT_REPO_URL}"
-echo "${LICATION_BACKEND}"
-echo "${BUILD_NUMBER}"
+echo "LICATION_ARTIFACT_URL: ${LICATION_ARTIFACT_URL}"
+echo "ART_USERNAME: ${ART_USERNAME}"
+echo "GIT_REPO_URL: ${GIT_REPO_URL}"
+echo "BUILD_NUMBER: ${BUILD_NUMBER}"
+echo "LICATION_BACKEND: ${LICATION_BACKEND}"
+echo "CHECKSUM: ${CHECKSUM}"
 
     curl -XPOST -H 'Content-type: application/json' -d "{
         \"artifactUrl\": \"${LICATION_ARTIFACT_URL}\",
@@ -19,7 +20,9 @@ echo "${BUILD_NUMBER}"
 while [ "$results" = "" ]
 do 
     echo "Checking scan status..."
-    results=`curl "${LICATION_BACKEND}"/sha/"${CHECKSUM}" | jq -r '.scanStatus'`
+    results=`curl "${LICATION_BACKEND}"/sha/"${CHECKSUM}"`
+    results="${results} | jq -r '.scanStatus'"
+
     echo "${results}"
     echo "Results stats above"
 
