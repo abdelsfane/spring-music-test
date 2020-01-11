@@ -9,6 +9,7 @@ node {
 // ------------------------------- Define Variables ------------------------------------------------
   
   ARTIFACT_URL = "http://3.17.145.188:8081/artifactory/chicago-workshop/"
+  SONARQUBE_ENDPOINT = "http://18.188.152.100:9000"
 
 // ------------------------------- Use Jenkins Credential Store ------------------------------------------------
 
@@ -54,7 +55,10 @@ node {
     stage('SonarQube analysis') {
         withSonarQubeEnv() { // Will pick the global server connection you have configured
             sh '''
-              ./gradlew sonarqube
+              ./gradlew sonarqube \
+              -Dsonar.projectKey=abdel-spring-music-app \
+              -Dsonar.host.url=${SONARQUBE_ENDPOINT} \
+              -Dsonar.login=${SONARQUBE_TOKEN}
              '''
         }
       }
