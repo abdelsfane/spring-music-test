@@ -14,7 +14,7 @@ echo "CHECKSUM: ${CHECKSUM}"
         \"artifactPass\": \"${ART_PASSWORD}\",
         \"githubUrl\": \"${GIT_REPO_URL}\", \"jenkinsJobID\": \"${BUILD_NUMBER}\",
         \"githubCreds\": \"${GIT_TOKEN}\"
-        }" "${LICATION_BACKEND}"
+        }" \"${LICATION_BACKEND}\"
 
 
 while [ "$results" = "" ]
