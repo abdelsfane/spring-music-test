@@ -20,9 +20,7 @@ echo "CHECKSUM: ${CHECKSUM}"
 while [ "$results" = "" ]
 do 
     echo "Checking scan status..."
-    results=`curl "${LICATION_BACKEND}"/sha/"${CHECKSUM}"`
-    results="${results} | jq -r '.scanStatus'"
-
+    results=`curl "${LICATION_BACKEND}"/sha/"${CHECKSUM}" | jq -r '.scanStatus'`
     echo "${results}"
     echo "Results stats above"
 

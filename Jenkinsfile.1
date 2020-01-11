@@ -114,6 +114,8 @@ node {
           curl -s -u${ART_USERNAME}:${ART_PASSWORD} -T ${file} ${ARTIFACT_URL}${APPLICATION_NAME}_${BUILD_NUMBER}.jar | jq -r '.checksums.sha1'
           ''', returnStdout: true).trim()
         }
+          env.CHECKSUM=CHECKSUM
+
         sh '''
         cd ${WORKSPACE}/$PROJECT_NAME/${SPRING_APP}/build/libs
         file=`ls *.jar`
