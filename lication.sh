@@ -2,18 +2,20 @@
 
 results=""
 
-curl -XPOST -H 'Content-type: application/json' -d "{
+mycurl=`curl -XPOST -H 'Content-type: application/json' -d "{
         \"artifactUrl\": \"${LICATION_ARTIFACT_URL}\",
         \"artifactUser\": \"${ART_USERNAME}\",
         \"artifactPass\": \"${ART_PASSWORD}\",
         \"githubUrl\": \"${GIT_REPO_URL}\", \"jenkinsJobID\": \"${BUILD_NUMBER}\",
         \"githubCreds\": \"${GIT_TOKEN}\"
-        }" "${LICATION_BACKEND}"
+        }" "${LICATION_BACKEND}"`
+echo "First Curl"
+echo "${mycurl}"
 
 while [ "$results" = "" ]
 do 
     echo "Checking scan status..."
-    results=`curl -s "${LICATION_BACKEND}"/sha/"${CHECKSUM}" | jq -r '.scanStatus'`
+    results=`curl "${LICATION_BACKEND}"/sha/"${CHECKSUM}" | jq -r '.scanStatus'`
     echo "${results}"
     echo "Results stats above"
 
