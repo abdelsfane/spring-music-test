@@ -1,16 +1,20 @@
 #!/bin/bash
 
 results=""
+echo "${LICATION_ARTIFACT_URL}"
+echo "${GIT_REPO_URL}"
+echo "${GIT_REPO_URL}"
+echo "${LICATION_BACKEND}"
+echo "${BUILD_NUMBER}"
 
-mycurl=`curl -XPOST -H 'Content-type: application/json' -d "{
+    curl -XPOST -H 'Content-type: application/json' -d "{
         \"artifactUrl\": \"${LICATION_ARTIFACT_URL}\",
         \"artifactUser\": \"${ART_USERNAME}\",
         \"artifactPass\": \"${ART_PASSWORD}\",
         \"githubUrl\": \"${GIT_REPO_URL}\", \"jenkinsJobID\": \"${BUILD_NUMBER}\",
         \"githubCreds\": \"${GIT_TOKEN}\"
-        }" "${LICATION_BACKEND}"`
-echo "First Curl"
-echo "${mycurl}"
+        }" "${LICATION_BACKEND}"
+
 
 while [ "$results" = "" ]
 do 
