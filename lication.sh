@@ -54,6 +54,7 @@ do
         exit 1
     else
         echo "Something went wrong! Please review logs"
+        echo "results: ${results}"
         exit 1
     fi
 done
