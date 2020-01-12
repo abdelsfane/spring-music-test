@@ -1,6 +1,6 @@
 #!/bin/bash
 
-results=""
+aresults=""
 CURL_SHA="18.218.151.201:8082/sha/${CHECKSUM}"
 GIT_REPO_URL="${GIT_REPO_URL%.*}"
 echo "LICATION_ARTIFACT_URL: ${LICATION_ARTIFACT_URL}${APPLICATION_NAME}_${BUILD_NUMBER}.jar"
@@ -24,7 +24,7 @@ echo "CURL SHA: ${CURL_SHA}"
     echo "${lication_status}"
 
 
-while [ "$results" = "" ]
+while [ "$aresults" = "" ]
 do 
     echo "Checking scan status..."
     results=`curl 18.218.151.201:8082/sha/${CHECKSUM}`
@@ -36,7 +36,7 @@ do
     echo ${myssssy}
     echo "myssssy below"
     echo "${myssssy}"
-
+    aresults="${results}"
 
     if [ "$results" = 2 ]
     then
