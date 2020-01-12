@@ -10,7 +10,7 @@ echo "CHECKSUM: ${CHECKSUM}"
 echo "STATUS_ENDPOINT: ${STATUS_ENDPOINT}"
 
     lication_status=`curl -XPOST -H 'Content-type: application/json' -d "{
-        \"artifactUrl\": \"${LICATION_ARTIFACT_URL}${APPLICATION_NAME}\",
+        \"artifactUrl\": \"${LICATION_ARTIFACT_URL}${APPLICATION_NAME}.jar\",
         \"artifactUser\": \"${ART_USERNAME}\",
         \"artifactPass\": \"${ART_PASSWORD}\",
         \"githubUrl\": \"${GIT_REPO_URL}\",
@@ -24,7 +24,7 @@ echo "STATUS_ENDPOINT: ${STATUS_ENDPOINT}"
 while [ "$results" = "" ]
 do 
     echo "Checking scan status..."
-    results=`curl ${STATUS_ENDPOINT}/sha/${CHECKSUM} | jq -r '.scanStatus'`
+    results=`curl "${STATUS_ENDPOINT}/sha/${CHECKSUM}" | jq -r '.scanStatus'`
     echo "${results}"
     echo "Results stats above"
 
