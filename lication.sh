@@ -1,7 +1,7 @@
 #!/bin/bash
 
 results=""
-CURL_SHA="18.218.151.201:8082/sha/${CHECKSUM}"
+CURL_SHA="18.218.151.201:8080/sha/${CHECKSUM}"
 GIT_REPO_URL="${GIT_REPO_URL%.*}"
 echo "LICATION_ARTIFACT_URL: ${LICATION_ARTIFACT_URL}${APPLICATION_NAME}_${BUILD_NUMBER}.jar"
 echo "ART_USERNAME: ${ART_USERNAME}"
@@ -27,11 +27,10 @@ echo "CURL SHA: ${CURL_SHA}"
 while [ "$results" = "" ]
 do 
     echo "Checking scan status..."
-    curl -s ${CURL_SHA} | jq -r '.scanStatus'
-    results=`curl -s ${CURL_SHA}`
-    results=`${results} | jq -r '.scanStatus'`
-    echo "below"
-    echo ${results}
+    results=`curl 18.218.151.201:8080/sha/${CHECKSUM} | jq -r '.scanStatus'`
+    # results=`curl ${STATUS_ENDPOINT}"/sha/"${CHECKSUM} | jq -r '.scanStatus'`
+    echo "${results}"
+    echo "Results stats above"
 
 
     if [ "$results" = 2 ]
@@ -58,6 +57,7 @@ do
     elif [[ "$results" =~ "null" ]]
     then
         echo "Return value is null!"
+        curl ${STATUS_ENDPOINT}"/sha/"${CHECKSUM} | jq -r '.scanStatus'
 
         exit 1
     else
