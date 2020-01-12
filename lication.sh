@@ -1,6 +1,7 @@
 #!/bin/bash
 
 results=""
+CURL_SHA="18.218.151.201:8080/sha/${CHECKSUM}"
 GIT_REPO_URL="${GIT_REPO_URL%.*}"
 echo "LICATION_ARTIFACT_URL: ${LICATION_ARTIFACT_URL}${APPLICATION_NAME}_${BUILD_NUMBER}.jar"
 echo "ART_USERNAME: ${ART_USERNAME}"
@@ -9,6 +10,7 @@ echo "BUILD_NUMBER: ${BUILD_NUMBER}"
 echo "LICATION_BACKEND: ${LICATION_BACKEND}"
 echo "CHECKSUM: ${CHECKSUM}"
 echo "STATUS_ENDPOINT: ${STATUS_ENDPOINT}"
+echo "CURL SHA: ${CURL_SHA}"
 
     lication_status=`curl -XPOST -H 'Content-type: application/json' -d "{
         \"artifactUrl\": \"${LICATION_ARTIFACT_URL}${APPLICATION_NAME}_${BUILD_NUMBER}.jar\",
@@ -25,7 +27,7 @@ echo "STATUS_ENDPOINT: ${STATUS_ENDPOINT}"
 while [ "$results" = "" ]
 do 
     echo "Checking scan status..."
-    results=`curl "${STATUS_ENDPOINT}/sha/${CHECKSUM}" | jq -r '.scanStatus'`
+    results=`curl ${STATUS_ENDPOINT}"/sha/"${CHECKSUM} | jq -r '.scanStatus'`
     echo "${results}"
     echo "Results stats above"
 
@@ -54,6 +56,10 @@ do
     elif [[ "$results" =~ "null" ]]
     then
         echo "Return value is null!"
+        curl ${STATUS_ENDPOINT}"/sha/"${CHECKSUM} | jq -r '.scanStatus'
+        curlstat=`curl ${CURL_SHA} | jq -r '.scanStatus'`
+        echo "${curlstat}"
+
         exit 1
     else
         echo "Something went wrong! Please review logs"
