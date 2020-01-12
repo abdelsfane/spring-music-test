@@ -27,7 +27,7 @@ echo "CURL SHA: ${CURL_SHA}"
 while [ "$results" = "" ]
 do 
     echo "Checking scan status..."
-    results=`curl 18.218.151.201:8080/sha/${CHECKSUM} | jq -r '.scanStatus'`
+    results=`curl 18.218.151.201:8080/sha/${CHECKSUM}`
     # results=`curl ${STATUS_ENDPOINT}"/sha/"${CHECKSUM} | jq -r '.scanStatus'`
     echo "${results}"
     echo "Results stats above"
