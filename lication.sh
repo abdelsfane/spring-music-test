@@ -8,13 +8,16 @@ echo "BUILD_NUMBER: ${BUILD_NUMBER}"
 echo "LICATION_BACKEND: ${LICATION_BACKEND}"
 echo "CHECKSUM: ${CHECKSUM}"
 
-    curl -XPOST -H 'Content-type: application/json' -d "{
+    lication_status=`curl -XPOST -H 'Content-type: application/json' -d "{
         \"artifactUrl\": \"${LICATION_ARTIFACT_URL}\",
         \"artifactUser\": \"${ART_USERNAME}\",
         \"artifactPass\": \"${ART_PASSWORD}\",
-        \"githubUrl\": \"${GIT_REPO_URL}\", \"jenkinsJobID\": \"${BUILD_NUMBER}\",
+        \"githubUrl\": \"${GIT_REPO_URL}\",
+        \"jenkinsJobID\": \"${BUILD_NUMBER}\",
         \"githubCreds\": \"${GIT_TOKEN}\"
-        }" "${LICATION_BACKEND}"
+        }" "${LICATION_BACKEND}"`
+
+    echo "${lication_status}"
 
 
 while [ "$results" = "" ]
