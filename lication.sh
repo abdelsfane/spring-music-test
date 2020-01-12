@@ -27,9 +27,11 @@ echo "CURL SHA: ${CURL_SHA}"
 while [ "$results" = "" ]
 do 
     echo "Checking scan status..."
-    results=`curl ${CURL_SHA} | jq -r '.scanStatus'`
-
-    curl 18.218.151.201:8082/sha/321b933a8d37c90f2a452d323fb36daca7ec60c3
+    curl -s ${CURL_SHA} | jq -r '.scanStatus'
+    results=`curl -s ${CURL_SHA}`
+    results=`${results} | jq -r '.scanStatus'`
+    echo "below"
+    echo ${results}
 
 
     if [ "$results" = 2 ]
@@ -56,8 +58,6 @@ do
     elif [[ "$results" =~ "null" ]]
     then
         echo "Return value is null!"
-        asd=`curl ${CURL_SHA}`    
-        echo ${asd}
 
         exit 1
     else
