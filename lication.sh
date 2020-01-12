@@ -10,7 +10,7 @@ echo "CHECKSUM: ${CHECKSUM}"
 echo "STATUS_ENDPOINT: ${STATUS_ENDPOINT}"
 
     lication_status=`curl -XPOST -H 'Content-type: application/json' -d "{
-        \"artifactUrl\": \"${LICATION_ARTIFACT_URL}${APPLICATION_NAME}.jar\",
+        \"artifactUrl\": \"${LICATION_ARTIFACT_URL}${APPLICATION_NAME}_${BUILD_NUMBER}.jar\",
         \"artifactUser\": \"${ART_USERNAME}\",
         \"artifactPass\": \"${ART_PASSWORD}\",
         \"githubUrl\": \"${GIT_REPO_URL}\",
