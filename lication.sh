@@ -59,6 +59,10 @@ do
         curl ${STATUS_ENDPOINT}"/sha/"${CHECKSUM} | jq -r '.scanStatus'
         curlstat=`curl ${CURL_SHA} | jq -r '.scanStatus'`
         echo "${curlstat}"
+        echo "reg below"
+        curl $CURL_SHA
+        echo "stat below"
+        curl $CURL_SHA | jq -r '.scanStatus'
 
         exit 1
     else
