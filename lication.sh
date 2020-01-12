@@ -10,7 +10,7 @@ echo "CHECKSUM: ${CHECKSUM}"
 echo "STATUS_ENDPOINT: ${STATUS_ENDPOINT}"
 
     lication_status=`curl -XPOST -H 'Content-type: application/json' -d "{
-        \"artifactUrl\": \"${LICATION_ARTIFACT_URL}\",
+        \"artifactUrl\": \"${LICATION_ARTIFACT_URL}${APPLICATION_NAME}\",
         \"artifactUser\": \"${ART_USERNAME}\",
         \"artifactPass\": \"${ART_PASSWORD}\",
         \"githubUrl\": \"${GIT_REPO_URL}\",
@@ -39,7 +39,7 @@ do
     then
         echo -e "Scan completed!\n"
         echo "No vulnerabilities found, deploying ${APPLICATION_NAME}..."
-        cd "${WORKSPACE}"/"$PROJECT_NAME"
+        cd "${WORKSPACE}/$PROJECT_NAME"
         curl -X POST \
             -H 'Content-Type: application/zip' \
             --data-binary @"pcf_artifacts.zip" \
