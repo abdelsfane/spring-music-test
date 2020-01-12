@@ -7,6 +7,7 @@ echo "GIT_REPO_URL: ${GIT_REPO_URL}"
 echo "BUILD_NUMBER: ${BUILD_NUMBER}"
 echo "LICATION_BACKEND: ${LICATION_BACKEND}"
 echo "CHECKSUM: ${CHECKSUM}"
+echo "STATUS_ENDPOINT: ${STATUS_ENDPOINT}"
 
     lication_status=`curl -XPOST -H 'Content-type: application/json' -d "{
         \"artifactUrl\": \"${LICATION_ARTIFACT_URL}\",
@@ -23,7 +24,7 @@ echo "CHECKSUM: ${CHECKSUM}"
 while [ "$results" = "" ]
 do 
     echo "Checking scan status..."
-    results=`curl "${LICATION_BACKEND}"/sha/"${CHECKSUM}" | jq -r '.scanStatus'`
+    results=`curl "${STATUS_ENDPOINT}"/sha/"${CHECKSUM}" | jq -r '.scanStatus'`
     echo "${results}"
     echo "Results stats above"
 
