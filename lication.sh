@@ -9,6 +9,7 @@ do
     then
         echo "Scan status is pending..."
         sleep ${SLEEP_SECONDS}
+        RESULTS=0 #this is temporary
     
     elif [ "$RESULTS" = 0 ]
     then
