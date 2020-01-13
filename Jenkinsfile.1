@@ -92,18 +92,18 @@ node {
           '''
       }
       // Run SonarQube Code Quality and Security Scan
-      stage('SonarQube analysis') {
-        withSonarQubeEnv() {
-          sh '''
-            cd ${SPRING_APP}
-            ./gradlew sonarqube \
-            -Dsonar.projectName=${APPLICATION_NAME} \
-            -Dsonar.projectKey=${APPLICATION_NAME} \
-            -Dsonar.host.url=${SONARQUBE_ENDPOINT} \
-            -Dsonar.login=${SONARQUBE_TOKEN}
-            '''
-        }
-      }
+      // stage('SonarQube analysis') {
+      //   withSonarQubeEnv() {
+      //     sh '''
+      //       cd ${SPRING_APP}
+      //       ./gradlew sonarqube \
+      //       -Dsonar.projectName=${APPLICATION_NAME} \
+      //       -Dsonar.projectKey=${APPLICATION_NAME} \
+      //       -Dsonar.host.url=${SONARQUBE_ENDPOINT} \
+      //       -Dsonar.login=${SONARQUBE_TOKEN}
+      //       '''
+      //   }
+      // }
       
       // Upload our application jar file to Artifactory
       stage("Upload to Artifactory") {
@@ -126,18 +126,20 @@ node {
       }
       // Call lication security scan service to aggregate results
       stage("(app)Lication Security Service") {
+        script{
+          RESULTS = sh(script: '''
+          curl -s ${STATUS_ENDPOINT}"/sha/"${CHECKSUM}
+          ''', returnStdout: true).trim()
+        }
         sh '''
-          RESPONSE=`curl ${STATUS_ENDPOINT}"/sha/"${CHECKSUM}`
-          echo ${RESPONSE}
-          echo "Results stats above1"
-
            cd ${WORKSPACE}/$PROJECT_NAME
            chmod 700 lication.sh
            ./lication.sh
-           RESPONSE=`curl ${STATUS_ENDPOINT}"/sha/"${CHECKSUM}`
-          echo ${RESPONSE}
-          echo "Results stats above2"
           '''
+          script{
+          RESULTS = sh(script: '''
+          curl -s ${STATUS_ENDPOINT}"/sha/"${CHECKSUM}
+          ''', returnStdout: true).trim()
       }
       stage("View Results"){
         sh '''
