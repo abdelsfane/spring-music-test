@@ -1,43 +1,19 @@
 #!/bin/bash
 
 results=""
-CURL_SHA="18.218.151.201:8082/sha/${CHECKSUM}"
-GIT_REPO_URL="${GIT_REPO_URL%.*}"
-echo "LICATION_ARTIFACT_URL: ${LICATION_ARTIFACT_URL}${APPLICATION_NAME}_${BUILD_NUMBER}.jar"
-echo "ART_USERNAME: ${ART_USERNAME}"
-echo "GIT_REPO_URL: ${GIT_REPO_URL}"
-echo "BUILD_NUMBER: ${BUILD_NUMBER}"
-echo "LICATION_BACKEND: ${LICATION_BACKEND}"
-echo "CHECKSUM: ${CHECKSUM}"
-echo "STATUS_ENDPOINT: ${STATUS_ENDPOINT}"
-echo "CURL SHA: ${CURL_SHA}"
 
-    lication_status=`curl -XPOST -H 'Content-type: application/json' -d "{
-        \"artifactUrl\": \"${LICATION_ARTIFACT_URL}${APPLICATION_NAME}_${BUILD_NUMBER}.jar\",
+curl -XPOST -H 'Content-type: application/json' -d "{
+        \"artifactUrl\": \"${LICATION_ARTIFACT_URL}\",
         \"artifactUser\": \"${ART_USERNAME}\",
         \"artifactPass\": \"${ART_PASSWORD}\",
-        \"githubUrl\": \"${GIT_REPO_URL}\",
-        \"jenkinsJobID\": \"${BUILD_NUMBER}\",
+        \"githubUrl\": \"${GIT_REPO_URL}\", \"jenkinsJobID\": \"${BUILD_NUMBER}\",
         \"githubCreds\": \"${GIT_TOKEN}\"
-        }" "${LICATION_BACKEND}"`
-
-    echo "${lication_status}"
-
+        }" "${LICATION_BACKEND}"
 
 while [ "$results" = "" ]
 do 
     echo "Checking scan status..."
-    aresults=$(curl -s 18.218.151.201:8082/sha/${CHECKSUM})
-    myssssy=$(curl -s 18.218.151.201:8082/sha/${CHECKSUM} | jq -r '.scanStatus')
-    # results=`curl ${STATUS_ENDPOINT}"/sha/"${CHECKSUM} | jq -r '.scanStatus'`
-    echo "$aresults"
-    echo "Results stats above"
-    echo "adasd"
-    echo ${myssssy}
-    echo "myssssy"
-    echo "$myssssy"
-    results="${myssssy}"
-
+    response=`curl -s "${LICATION_BACKEND}"/sha/"${CHECKSUM}" | jq -r '.scanStatus'`
 
     if [ "$results" = 2 ]
     then
@@ -49,7 +25,7 @@ do
     then
         echo -e "Scan completed!\n"
         echo "No vulnerabilities found, deploying ${APPLICATION_NAME}..."
-        cd "${WORKSPACE}/$PROJECT_NAME"
+        cd "${WORKSPACE}"/"$PROJECT_NAME"
         curl -X POST \
             -H 'Content-Type: application/zip' \
             --data-binary @"pcf_artifacts.zip" \
@@ -63,12 +39,9 @@ do
     elif [[ "$results" =~ "null" ]]
     then
         echo "Return value is null!"
-        curl ${STATUS_ENDPOINT}"/sha/"${CHECKSUM} | jq -r '.scanStatus'
-
         exit 1
     else
         echo "Something went wrong! Please review logs"
-        echo "results: ${results}"
         exit 1
     fi
 done
