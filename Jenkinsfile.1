@@ -93,18 +93,18 @@ node {
           '''
       }
       // Run SonarQube Code Quality and Security Scan
-      // stage('SonarQube analysis') {
-      //   withSonarQubeEnv() {
-      //     sh '''
-      //       cd ${SPRING_APP}
-      //       ./gradlew sonarqube \
-      //       -Dsonar.projectName=${APPLICATION_NAME} \
-      //       -Dsonar.projectKey=${APPLICATION_NAME} \
-      //       -Dsonar.host.url=${SONARQUBE_ENDPOINT} \
-      //       -Dsonar.login=${SONARQUBE_TOKEN}
-      //       '''
-      //   }
-      // }
+      stage('SonarQube analysis') {
+        withSonarQubeEnv() {
+          sh '''
+            cd ${SPRING_APP}
+            ./gradlew sonarqube \
+            -Dsonar.projectName=${APPLICATION_NAME} \
+            -Dsonar.projectKey=${APPLICATION_NAME} \
+            -Dsonar.host.url=${SONARQUBE_ENDPOINT} \
+            -Dsonar.login=${SONARQUBE_TOKEN}
+            '''
+        }
+      }
       
       // Upload our application jar file to Artifactory
       stage("Upload to Artifactory") {
@@ -132,20 +132,17 @@ node {
         chmod 700 lication_endpoint.sh
         ./lication_endpoint.sh
         '''
-        echo "CHECKSUM: ${CHECKSUM}"
         script{
           RESULTS = sh(script: '''
           curl -s ${STATUS_ENDPOINT}"/sha/"${CHECKSUM} | jq -r '.scanStatus'
           ''', returnStdout: true).trim()
           env.RESULTS=RESULTS
-          echo "${RESULTS}"
         }
         sh '''
            cd ${WORKSPACE}/$PROJECT_NAME
            chmod 700 lication.sh
            ./lication.sh
           '''
-          
       }
       stage("View Results"){
         sh '''

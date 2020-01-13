@@ -3,12 +3,11 @@ echo "RESULTS: ${RESULTS}"
 
 while true
 do 
-    echo "Checking scan status..."
-    # | jq -r '.scanStatus'
+    echo "Checking Lication security scan status..."
 
     if [ "$RESULTS" = 2 ]
     then
-        echo "Scan status is still pending..."
+        echo "Scan status is pending..."
         sleep ${SLEEP_SECONDS}
     
     elif [ "$RESULTS" = 0 ]
