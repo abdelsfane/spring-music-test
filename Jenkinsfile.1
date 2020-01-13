@@ -126,9 +126,10 @@ node {
       }
       // Call lication security scan service to aggregate results
       stage("(app)Lication Security Service") {
-        GIT_REPO_URL="${GIT_REPO_URL%.*}"
+        
         script{
           LICATION_STATUS =sh(script: '''
+            GIT_REPO_URL="${GIT_REPO_URL%.*}"
             curl -XPOST -H 'Content-type: application/json' -d "{
               \"artifactUrl\": \"${LICATION_ARTIFACT_URL}${APPLICATION_NAME}_${BUILD_NUMBER}.jar\",
               \"artifactUser\": \"${ART_USERNAME}\",
