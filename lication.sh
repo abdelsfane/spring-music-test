@@ -25,7 +25,7 @@ echo "STATUS_ENDPOINT: ${STATUS_ENDPOINT}"
 while [ "$RESULTS" = "" ]
 do 
     echo "Checking scan status..."
-    RESPONSE=$(curl '${STATUS_ENDPOINT}/sha/${CHECKSUM}') | jq -r '.scanStatus'
+    RESPONSE=$(curl ${STATUS_ENDPOINT}"/sha/"${CHECKSUM} | jq -r '.scanStatus')
     echo "${RESPONSE}"
     echo "Results stats above"
     RESULTS="${RESPONSE}"
