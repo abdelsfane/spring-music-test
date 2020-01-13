@@ -15,7 +15,8 @@ do
     then
         echo -e "Scan completed!\n"
         echo "No vulnerabilities found, deploying ${APPLICATION_NAME}..."
-        cd "${WORKSPACE}/$PROJECT_NAME"
+        cd ${WORKSPACE}"/"$PROJECT_NAME
+        ls
         curl -X POST \
             -H 'Content-Type: application/zip' \
             --data-binary @"pcf_artifacts.zip" \
