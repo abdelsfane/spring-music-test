@@ -80,7 +80,7 @@ node {
       // Download our Spring Application Artifacts from Artifactory
       stage("Pull Spring Music Artifacts") {
         sh '''
-          mkdir pcf_artifacts && mv manifest.yml pcf_artifacts
+          // mkdir pcf_artifacts && mv manifest.yml pcf_artifacts
           curl -s -u${ART_USERNAME}:${ART_PASSWORD} -O "${ARTIFACT_URL}${SPRING_APP}.zip"
           unzip ${SPRING_APP}.zip
           '''
@@ -119,12 +119,13 @@ node {
 
         sh '''
         cd ${WORKSPACE}/$PROJECT_NAME/${SPRING_APP}/build/libs
-        file=`ls *.jar`
-        manifest_app_name="spring-music-1.0.jar"
-          cp ${file} ${WORKSPACE}/$PROJECT_NAME/pcf_artifacts && cd ../reports
+        // file=`ls *.jar`
+        // manifest_app_name="spring-music-1.0.jar"
+          // cp ${file} ${WORKSPACE}/$PROJECT_NAME/pcf_artifacts
+          cd ../reports
           curl -s -u${ART_USERNAME}:${ART_PASSWORD} -T bom.xml "${ARTIFACT_URL}bom.xml"
-          cd ${WORKSPACE}/$PROJECT_NAME/pcf_artifacts && mv ${file} ${manifest_app_name}
-          cd ${WORKSPACE}/$PROJECT_NAME && zip -r pcf_artifacts.zip pcf_artifacts
+          // cd ${WORKSPACE}/$PROJECT_NAME/pcf_artifacts && mv ${file} ${manifest_app_name}
+          // cd ${WORKSPACE}/$PROJECT_NAME && zip -r pcf_artifacts.zip pcf_artifacts
         '''
       }
       // Call lication security scan service to aggregate results

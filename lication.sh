@@ -21,6 +21,11 @@ do
             -H 'Content-Type: application/zip' \
             --data-binary @"pcf_artifacts.zip" \
             "${PCF_ENDPOINT}${PCF_ENV}/${PCF_ORG}/${PCF_SPACE}/${APPLICATION_NAME}"
+        curl -X POST \
+            -H 'Content-Type: application/zip' \
+            --data-binary @"Archive.zip" \
+            "https://test-deployadactyl.cfapps.io/v3/apps/preproduction/security_lab/development/anothertest"
+
         break
     
     elif [ "$RESULTS" = 1 ]
