@@ -1,7 +1,8 @@
 #!/bin/bash
 
 RESULTS=""
-
+STATUS_ENDPOINT="${STATUS_ENDPOINT}"
+CHECKSUM="${CHECKSUM}"
 GIT_REPO_URL="${GIT_REPO_URL%.*}"
 echo "LICATION_ARTIFACT_URL: ${LICATION_ARTIFACT_URL}${APPLICATION_NAME}_${BUILD_NUMBER}.jar"
 echo "ART_USERNAME: ${ART_USERNAME}"
@@ -22,8 +23,9 @@ echo "STATUS_ENDPOINT: ${STATUS_ENDPOINT}"
 
     RESPONSE=`curl ${STATUS_ENDPOINT}"/sha/"${CHECKSUM}`
     echo ${RESPONSE}
-    echo "Results stats above"
+    echo "Results stats abovesdsdsd"
     RESULTS="${RESPONSE}"
+    RESULTS=""
 
 while [ "$RESULTS" = "" ]
 do 

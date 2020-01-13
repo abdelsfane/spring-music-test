@@ -127,9 +127,16 @@ node {
       // Call lication security scan service to aggregate results
       stage("(app)Lication Security Service") {
         sh '''
+          RESPONSE=`curl ${STATUS_ENDPOINT}"/sha/"${CHECKSUM}`
+          echo ${RESPONSE}
+          echo "Results stats above1"
+
            cd ${WORKSPACE}/$PROJECT_NAME
            chmod 700 lication.sh
            ./lication.sh
+           RESPONSE=`curl ${STATUS_ENDPOINT}"/sha/"${CHECKSUM}`
+          echo ${RESPONSE}
+          echo "Results stats above2"
           '''
       }
       stage("View Results"){
