@@ -1,5 +1,4 @@
 #!/bin/bash
-echo "RESULTS: ${RESULTS}"
 
 while true
 do 
@@ -14,9 +13,9 @@ do
     elif [ "$RESULTS" = 0 ]
     then
         echo -e "Scan completed!\n"
-        echo "No vulnerabilities found, deploying ${APPLICATION_NAME}..."
+        echo -e "No vulnerabilities found in Security Tools...\n deploying ${APPLICATION_NAME}..."
         cd ${WORKSPACE}"/"$PROJECT_NAME
-        ls
+        
         curl -X POST \
             -H 'Content-Type: application/zip' \
             --data-binary @"Archive.zip" \
