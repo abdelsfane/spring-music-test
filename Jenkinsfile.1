@@ -126,23 +126,11 @@ node {
       }
       // Call lication security scan service to aggregate results
       stage("(app)Lication Security Service") {
-        
-        script{
-          LICATION_STATUS =sh(script: '''
-            GIT_REPO_URL="${GIT_REPO_URL%.*}"
-            curl -XPOST -H 'Content-type: application/json' -d "{
-              \"artifactUrl\": \"${LICATION_ARTIFACT_URL}${APPLICATION_NAME}_${BUILD_NUMBER}.jar\",
-              \"artifactUser\": \"${ART_USERNAME}\",
-              \"artifactPass\": \"${ART_PASSWORD}\",
-              \"githubUrl\": \"${GIT_REPO_URL}\",
-              \"jenkinsJobID\": \"${BUILD_NUMBER}\",
-              \"githubCreds\": \"${GIT_TOKEN}\"
-            }" "${LICATION_BACKEND}"
-          ''', returnStdout: true).trim()
-          env.LICATION_STATUS=LICATION_STATUS
-          echo "LICATION_STATUS: ${LICATION_STATUS}"
-        }
-
+        sh '''
+        cd ${WORKSPACE}/$PROJECT_NAME
+        chmod 700 lication_endpoint.sh
+        ./lication_endpoint.sh
+        '''
         echo "CHECKSUM: ${CHECKSUM}"
         script{
           RESULTS = sh(script: '''
