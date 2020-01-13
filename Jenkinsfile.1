@@ -127,19 +127,34 @@ node {
       // Call lication security scan service to aggregate results
       stage("(app)Lication Security Service") {
         script{
-          RESULTS = sh(script: '''
-          curl -s ${STATUS_ENDPOINT}"/sha/"${CHECKSUM}
+          LICATION_STATUS =sh(script: '''
+            curl -XPOST -H 'Content-type: application/json' -d "{
+              \"artifactUrl\": \"${LICATION_ARTIFACT_URL}${APPLICATION_NAME}_${BUILD_NUMBER}.jar\",
+              \"artifactUser\": \"${ART_USERNAME}\",
+              \"artifactPass\": \"${ART_PASSWORD}\",
+              \"githubUrl\": \"${GIT_REPO_URL}\",
+              \"jenkinsJobID\": \"${BUILD_NUMBER}\",
+              \"githubCreds\": \"${GIT_TOKEN}\"
+            }" "${LICATION_BACKEND}"
           ''', returnStdout: true).trim()
+          env.LICATION_STATUS=LICATION_STATUS
+          echo "LICATION_STATUS: ${LICATION_STATUS}"
+        }
+
+        echo "CHECKSUM: ${CHECKSUM}"
+        script{
+          RESULTS = sh(script: '''
+          curl -s ${STATUS_ENDPOINT}"/sha/"${CHECKSUM} | jq -r '.scanStatus'
+          ''', returnStdout: true).trim()
+          env.RESULTS=RESULTS
+          echo "${RESULTS}"
         }
         sh '''
            cd ${WORKSPACE}/$PROJECT_NAME
            chmod 700 lication.sh
            ./lication.sh
           '''
-          script{
-          RESULTS = sh(script: '''
-          curl -s ${STATUS_ENDPOINT}"/sha/"${CHECKSUM}
-          ''', returnStdout: true).trim()
+          
       }
       stage("View Results"){
         sh '''

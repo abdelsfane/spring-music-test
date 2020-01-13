@@ -1,46 +1,14 @@
 #!/bin/bash
+echo "RESULTS: ${RESULTS}"
 
-RESULTS=""
-STATUS_ENDPOINT="${STATUS_ENDPOINT}"
-CHECKSUM="${CHECKSUM}"
-GIT_REPO_URL="${GIT_REPO_URL%.*}"
-echo "LICATION_ARTIFACT_URL: ${LICATION_ARTIFACT_URL}${APPLICATION_NAME}_${BUILD_NUMBER}.jar"
-echo "ART_USERNAME: ${ART_USERNAME}"
-echo "GIT_REPO_URL: ${GIT_REPO_URL}"
-echo "BUILD_NUMBER: ${BUILD_NUMBER}"
-echo "LICATION_BACKEND: ${LICATION_BACKEND}"
-echo "CHECKSUM: ${CHECKSUM}"
-echo "STATUS_ENDPOINT: ${STATUS_ENDPOINT}"
-
-    lication_status=`curl -XPOST -H 'Content-type: application/json' -d "{
-        \"artifactUrl\": \"${LICATION_ARTIFACT_URL}${APPLICATION_NAME}_${BUILD_NUMBER}.jar\",
-        \"artifactUser\": \"${ART_USERNAME}\",
-        \"artifactPass\": \"${ART_PASSWORD}\",
-        \"githubUrl\": \"${GIT_REPO_URL}\",
-        \"jenkinsJobID\": \"${BUILD_NUMBER}\",
-        \"githubCreds\": \"${GIT_TOKEN}\"
-        }" "${LICATION_BACKEND}"`
-
-    RESPONSE=`curl ${STATUS_ENDPOINT}"/sha/"${CHECKSUM}`
-    echo ${RESPONSE}
-    echo "Results stats abovesdsdsd"
-    RESULTS="${RESPONSE}"
-    RESULTS=""
-
-while [ "$RESULTS" = "" ]
+while true
 do 
-    echo "Checking scan status...LOOP"
-    RESPONSE=$(curl ${STATUS_ENDPOINT}"/sha/"${CHECKSUM})
+    echo "Checking scan status..."
     # | jq -r '.scanStatus'
-    echo ${RESPONSE}
-    echo "Results stats above"
-    RESULTS="${RESPONSE}"
-
 
     if [ "$RESULTS" = 2 ]
     then
         echo "Scan status is still pending..."
-        RESULTS=""
         sleep ${SLEEP_SECOND}
     
     elif [ "$RESULTS" = 0 ]
@@ -52,6 +20,7 @@ do
             -H 'Content-Type: application/zip' \
             --data-binary @"pcf_artifacts.zip" \
             "${PCF_ENDPOINT}${PCF_ENV}/${PCF_ORG}/${PCF_SPACE}/${APPLICATION_NAME}"
+        break
     
     elif [ "$RESULTS" = 1 ]
     then
