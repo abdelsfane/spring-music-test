@@ -20,12 +20,12 @@ node {
     ARTIFACT_URL = "http://18.216.57.173:8081/artifactory/csnp/"
     SONARQUBE_ENDPOINT = "http://18.218.227.237:9000"
     DEPENDENCYTRACK_ENDPOINT = "http://3.135.182.149:8080/"
-    SERVICE_ENDPOINT = "http://18.224.64.196:8080"
+    SERVICE_ENDPOINT = "http://18.218.151.201:8080"
     SLEEP_SECONDS = 5
     GIT_REPO_URL = scm.userRemoteConfigs[0].url  
     WORKSPACE = pwd()
-    LICATION_BACKEND = "18.224.64.196:8082"
-    LICATION_FRONTEND = "http://18.224.64.196/dashboard"
+    LICATION_BACKEND = "18.218.151.201:8082"
+    LICATION_FRONTEND = "http://18.218.151.201/dashboard"
     LICATION_ARTIFACT_URL = "http://18.216.57.173:8081/artifactory/webapp/#/artifacts/browse/tree/General/csnp/"
     CHECKSUM = "NOT_SET"
 
@@ -126,7 +126,6 @@ node {
       // Call lication security scan service to aggregate results
       stage("(app)Lication Security Service") {
         sh '''
-           GIT_REPO_URL="${GIT_REPO_URL%.*}"
            cd ${WORKSPACE}/$PROJECT_NAME
            chmod 700 lication.sh
            ./lication.sh
