@@ -9,7 +9,7 @@ do
     if [ "$RESULTS" = 2 ]
     then
         echo "Scan status is still pending..."
-        sleep ${SLEEP_SECOND}
+        sleep ${SLEEP_SECONDS}
     
     elif [ "$RESULTS" = 0 ]
     then
