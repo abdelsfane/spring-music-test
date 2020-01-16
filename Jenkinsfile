@@ -11,7 +11,7 @@ node {
     checkout scm
 
   // ------------------------------- Define Variables ------------------------------------------------
-    SPRING_APP = "spring-music-app"
+    SPRING_APP = "spring-music"
     APPLICATION_NAME = "${BUILD_USER_ID}-${SPRING_APP}"
     PCF_ENV = "preproduction"
     PCF_ORG = "security_lab"
@@ -20,12 +20,12 @@ node {
     ARTIFACT_URL = "http://18.216.57.173:8081/artifactory/sample-test/"
     SONARQUBE_ENDPOINT = "http://18.218.227.237:9000"
     DEPENDENCYTRACK_ENDPOINT = "http://3.135.182.149:8080/"
-    STATUS_ENDPOINT = "18.218.151.201:8082"
+    STATUS_ENDPOINT = "13.59.34.104:8082"
     SLEEP_SECONDS = 5
     GIT_REPO_URL = scm.userRemoteConfigs[0].url
     WORKSPACE = pwd()
-    LICATION_BACKEND = "18.218.151.201:8080"
-    LICATION_FRONTEND = "http://18.218.151.201/dashboard"
+    LICATION_BACKEND = "13.59.34.104:8080"
+    LICATION_FRONTEND = "http://13.59.34.104/dashboard"
     LICATION_ARTIFACT_URL = "http://18.216.57.173:8081/artifactory/webapp/#/artifacts/browse/tree/General/sample-test/"
     CHECKSUM = "NOT_SET"
 
@@ -80,6 +80,11 @@ node {
       // Download our Spring Application Artifacts from Artifactory
       stage("Pull Spring Music Artifacts") {
         sh '''
+        DIRECTORY="pcf_artifacts"
+          if [ -d "$DIRECTORY" ]; then
+            echo "Deleting: $DIRECTORY directory"
+            rm -rf pcf_artifacts
+          fi
           mkdir pcf_artifacts && mv manifest.yml pcf_artifacts
           curl -s -u${ART_USERNAME}:${ART_PASSWORD} -O "${ARTIFACT_URL}${SPRING_APP}.zip"
           unzip ${SPRING_APP}.zip
@@ -89,7 +94,7 @@ node {
       stage("Build Project & Create BOM") {
         sh '''
           cd ~/$PROJECT_NAME/${SPRING_APP}
-          ./gradlew build cyclonedxBom
+          ./gradlew clean assemble cyclonedxBom
           '''
       }
       // Run SonarQube Code Quality and Security Scan
@@ -123,7 +128,6 @@ node {
         manifest_app_name="spring-music-1.0.jar"
           cp ${file} ${WORKSPACE}/$PROJECT_NAME/pcf_artifacts && cd ../reports
           curl -s -u${ART_USERNAME}:${ART_PASSWORD} -T bom.xml "${ARTIFACT_URL}bom.xml"
-          cd ${WORKSPACE}/$PROJECT_NAME/pcf_artifacts && mv ${file} ${manifest_app_name}
           cd ${WORKSPACE}/$PROJECT_NAME && zip -r pcf_artifacts.zip pcf_artifacts
         '''
       }
@@ -152,6 +156,7 @@ node {
         echo -e "SonarQube EndPoint: ${SONARQUBE_ENDPOINT}\n User/Password = system/csnpworkshop01"
         echo -e "DependencyTrack Endpoint: ${DEPENDENCYTRACK_ENDPOINT}\n User/Password = system/csnpworkshop01"
         echo "Your Application Direct URL:" https://${APPLICATION_NAME}.cfapps.io
+        echo "Security Service URL: ${LICATION_FRONTEND}"
         '''
       }
      }
