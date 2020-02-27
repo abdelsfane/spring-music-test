@@ -1,6 +1,7 @@
 [CyberSecurity NP](https://www.cybersecuritynp.org) is an organization dedicated to promoting the education of cyber security nationally in local communities. Check out our [Chapters](https://www.cybersecuritynp.org/chapters/)
 
 ![CyberSecurity NP](https://www.cybersecuritynp.org/wp-content/uploads/2019/07/logo-no-website.png)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fabdelsfane%2Fspring-music-test.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fabdelsfane%2Fspring-music-test?ref=badge_shield)
 
 ======================================================================================
 This a sample demo to demonstrate how we can automate building an app, run a security scan and deploy it in the cloud
@@ -107,3 +108,7 @@ $ cf restart
 #### Database drivers
 
 Database drivers for MySQL, Postgres, MongoDB, and Redis are included in the project. To connect to an Oracle database, you will need to download the appropriate driver (e.g. from http://www.oracle.com/technetwork/database/enterprise-edition/jdbc-112010-090769.html?ssSourceSiteId=otnjp), add the driver .jar file to the `src/main/webapp/WEB-INF/lib` directory in the project, and re-build the application .war file using `./gradlew assemble`.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fabdelsfane%2Fspring-music-test.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fabdelsfane%2Fspring-music-test?ref=badge_large)
